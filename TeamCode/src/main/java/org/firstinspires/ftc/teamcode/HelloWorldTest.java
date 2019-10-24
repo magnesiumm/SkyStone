@@ -1,5 +1,5 @@
 package org.firstinspires.ftc.teamcode;
-//@Author AJ Radik
+//@Author AJ Radik, Brian Li
 
 public class HelloWorldTest {
 
