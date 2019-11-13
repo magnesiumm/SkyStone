@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class MyFIRSTJavaOpMode extends LinearOpMode {
     private Gyroscope imu;
-    private DcMotor motorTest;
+    private DcMotor leftMotor;
     private DigitalChannel digitalTouch;
     private DistanceSensor sensorColorRange;
     private Servo servoTest;
@@ -20,7 +20,7 @@ public class MyFIRSTJavaOpMode extends LinearOpMode {
     @Override
     public void runOpMode() {
         imu = hardwareMap.get(Gyroscope.class, "imu");
-        motorTest = hardwareMap.get(DcMotor.class, "motorTest");
+        leftMotor = hardwareMap.get(DcMotor.class, "left_drive");
         digitalTouch = hardwareMap.get(DigitalChannel.class, "digitalTouch");
         sensorColorRange = hardwareMap.get(DistanceSensor.class, "sensorColorRange");
         servoTest = hardwareMap.get(Servo.class, "servoTest");
@@ -34,7 +34,6 @@ public class MyFIRSTJavaOpMode extends LinearOpMode {
         while (opModeIsActive()) {
             telemetry.addData("Status", "Running");
             telemetry.update();
-
         }
     }
 }
