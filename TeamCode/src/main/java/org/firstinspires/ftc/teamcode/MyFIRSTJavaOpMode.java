@@ -17,7 +17,6 @@ public class MyFIRSTJavaOpMode extends LinearOpMode {
     private DistanceSensor sensorColorRange;
     private Servo servoTest;
 
-
     @Override
     public void runOpMode() {
         imu = hardwareMap.get(Gyroscope.class, "imu");
