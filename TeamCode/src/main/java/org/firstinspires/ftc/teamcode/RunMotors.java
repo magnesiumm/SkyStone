@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @TeleOp(name="RunMotors")
 
 // This may or may not work, I really don't know.
+
 @SuppressWarnings("unused")
 public class RunMotors extends LinearOpMode
 {
@@ -18,7 +19,7 @@ public class RunMotors extends LinearOpMode
     private float minPow = 0.01f, maxPow = 0.1f;
 
     private String[] motorNames = {
-
+        "left_drive", "right_drive"
     };
     private DcMotor[] motors = new DcMotor[motorNames.length];
 
