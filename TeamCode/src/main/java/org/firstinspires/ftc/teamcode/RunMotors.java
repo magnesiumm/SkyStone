@@ -9,8 +9,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name="RunMotors")
 
-// This may or may not work, I really don't know.
-
 @SuppressWarnings("unused")
 public class RunMotors extends LinearOpMode
 {
@@ -18,9 +16,10 @@ public class RunMotors extends LinearOpMode
     int tps = 1;
 
     private float minPow = 0.01f, maxPow = 0.1f;
+    private float minTurningPow = 0.02f, maxTurningPow = 0.8f;
 
-    private String[] motorNames = { "left_drive", "right_drive" };
-    private DcMotor[] motors = new DcMotor[motorNames.length];
+    private DcMotor leftDrive;
+    private DcMotor rightDrive;
 
     private Gamepad c1;
 
@@ -28,12 +27,14 @@ public class RunMotors extends LinearOpMode
     public void runOpMode() throws InterruptedException
     {
         c1 = this.gamepad1;
-        initMotors();
+
+        leftDrive = hardwareMap.get(DcMotor.class, "left_drive");
+        rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
 
         boolean run = true;
-        if (c1 == null)
+        if (c1 == null || leftDrive == null || rightDrive == null)
         {
-            telemetry.addData("Status", "Controller not found");
+            telemetry.addData("Status", "Hardware not found");
             telemetry.update();
 
             run = false;
@@ -44,15 +45,28 @@ public class RunMotors extends LinearOpMode
 
         while (run)
         {
-            sleep(1000/tps);
+            sleep(1000 / tps);
 
             Direction dir = null;
             float pow = 1 / c1.left_stick_y * (maxPow - minPow) + minPow;
+            boolean turning = true;
 
             if (c1.left_stick_y > 0)
+            {
                 dir = Direction.FORWARD;
+                turning = false;
+            }
             else if (c1.left_stick_y < 0)
+            {
                 dir = Direction.REVERSE;
+                turning = false;
+            }
+
+            if (turning)
+            {
+                float turningPow = 1 / c1.left_stick_x * (maxTurningPow - minTurningPow) + minTurningPow;
+                turn(turningPow);
+            }
 
             setMotors(pow, dir);
 
@@ -69,23 +83,34 @@ public class RunMotors extends LinearOpMode
         telemetry.update();
     }
 
-    private void initMotors()
-    {
-        for (int i = 0; i < motors.length; i++)
-            motors[i] = hardwareMap.get(DcMotor.class, motorNames[i]);
-
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
-    }
-
     private void setMotors(float power, Direction dir)
     {
-        for (DcMotor motor : motors)
-        {
-            motor.setPower(power);
-            motor.setDirection(dir);
-        }
+        leftDrive.setPower(power);
+        leftDrive.setDirection(dir == null ? Direction.FORWARD : dir);
+
+        rightDrive.setPower(power);
+        rightDrive.setDirection(dir == null ? Direction.FORWARD : dir);
     }
 
+    // -1 is left, 1 is right
+    private void turn(float pow)
+    {
+        if (pow < 0)
+        {
+            leftDrive.setDirection(Direction.REVERSE);
+            leftDrive.setPower(pow);
+
+            rightDrive.setDirection(Direction.FORWARD);
+            rightDrive.setPower(pow);
+        }
+        else if (pow > 0)
+        {
+            rightDrive.setDirection(Direction.REVERSE);
+            rightDrive.setPower(pow);
+
+            leftDrive.setDirection(Direction.FORWARD);
+            leftDrive.setPower(pow);
+        }
+    }
 
 }
