@@ -30,20 +30,18 @@ public class RunMotors extends LinearOpMode
 
         leftDrive = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
-
-        boolean run = true;
         if (c1 == null || leftDrive == null || rightDrive == null)
         {
             telemetry.addData("Status", "Hardware not found");
             telemetry.update();
 
-            run = false;
+            return;
         }
 
         waitForStart();
         runtime.reset();
 
-        while (run)
+        while (opModeIsActive())
         {
             sleep(1000 / tps);
 
