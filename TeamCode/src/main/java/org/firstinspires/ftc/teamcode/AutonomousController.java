@@ -11,7 +11,6 @@ import java.util.Vector;
 
     The system in place for autonomous movement requires the robot to have it's own position.
     It also requires the robot to know it's angle of rotation, so it might not even be possible.
-
     Given the necessary variables, it, in all likelihood, still will not work.
 
 */
