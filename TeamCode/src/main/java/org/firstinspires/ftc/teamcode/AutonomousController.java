@@ -59,6 +59,8 @@ public class AutonomousController extends LinearOpMode
             double distance = Math.sqrt((dx - x) * (dx - x) + (dy - y) * (dy - y));
             if (distance > AUTOPILOT_SENSITIVITY)
             {
+                updateAngle();
+
                 // Gets the direction "vector."
                 double[] dir = {dx - x, dy - y};
 
@@ -68,17 +70,11 @@ public class AutonomousController extends LinearOpMode
 
                 float turningPow = (maxTurningPow + minTurningPow) / 2f;
                 if (angle > theta + AUTOPILOT_TURN_SENSITIVITY)
-                {
                     turn(turningPow);
-                }
                 else if (angle < theta - AUTOPILOT_TURN_SENSITIVITY)
-                {
                     turn(-turningPow);
-                }
                 else
-                {
                     setMotors((maxPow + minPow) / 2f, DcMotorSimple.Direction.FORWARD);
-                }
 
             }
 
@@ -123,7 +119,13 @@ public class AutonomousController extends LinearOpMode
         }
     }
 
-    // in Radians
+    private void updateAngle()
+    {
+        double alpha = Math.atan(y / x);
+        angle = (float) (getAngle(alpha, x, y));
+    }
+
+    // in radians
     private double getAngle(double refAngle, double x, double y)
     {
         if (y < Math.PI / 2 && x < Math.PI / 2)
