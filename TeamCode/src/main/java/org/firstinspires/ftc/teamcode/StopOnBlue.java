@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.LightSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name="StopOnBlue", group="Linear Opmode")
@@ -43,6 +42,8 @@ public class StopOnBlue extends LinearOpMode {
         leftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         rightMotor = hardwareMap.dcMotor.get("right_drive");
         rightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        hardwareMap.touchSensor.get("touch_sensor");
 
         cs = hardwareMap.colorSensor.get("cs");
         cs.enableLed(false);
