@@ -10,18 +10,6 @@ public class Vector {
      *
      * @param i the x component
      * @param j the y component
-     */
-    public Vector(float i, float j) {
-        this.i = i;
-        this.j = j;
-        this.k = 0;
-    }
-
-    /*
-     * Vector class constuctor: initialize components
-     *
-     * @param i the x component
-     * @param j the y component
      * @param k the z component
      */
     public Vector(float i, float j, float k) {
