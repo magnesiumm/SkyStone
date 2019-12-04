@@ -90,8 +90,8 @@ import org.firstinspires.ftc.teamcode.utils.TrackableObject;
  *      Vuforia license key as is explained below.
  */
 
-@TeleOp(name = "SKYSTONE Vuforia Nav", group = "Concept")
-@Disabled
+@TeleOp(name = "SKYSTONE Vuforia Nav", group = "Linear Opmode")
+//@Disabled
 public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
 
     // IMPORTANT: For Phone Camera, set 1) the camera source and 2) the orientation,
