@@ -70,6 +70,8 @@ public class RunMotors extends LinearOpMode
             setMotors(pow, dir);
 
             telemetry.addData("Status", "Running");
+            telemetry.addData("Stick Values", String.format("X: %d, Y: %d", (double) c1.left_stick_x, (double) c1.left_stick_y));
+
             telemetry.update();
 
         }
