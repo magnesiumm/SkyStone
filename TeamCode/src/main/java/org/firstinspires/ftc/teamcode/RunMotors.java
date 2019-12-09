@@ -66,8 +66,11 @@ public class RunMotors extends LinearOpMode
                 float turningPow = 1 / c1.left_stick_x * (maxTurningPow - minTurningPow) + minTurningPow;
                 turn(turningPow);
             }
+            else
+            {
+                setMotors(pow, dir);
+            }
 
-            setMotors(pow, dir);
 
             telemetry.addData("Status", "Running");
             telemetry.addData("Stick Values", String.format("X: %d, Y: %d", (double) c1.left_stick_x, (double) c1.left_stick_y));
