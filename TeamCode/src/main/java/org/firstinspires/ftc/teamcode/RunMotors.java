@@ -7,13 +7,13 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@TeleOp(name="RunMotors")
+@TeleOp(name="RunMotors", group="Linear")
 
 @SuppressWarnings("unused")
 public class RunMotors extends LinearOpMode
 {
     private ElapsedTime runtime = new ElapsedTime();
-    int tps = 1;
+    private int tps = 1000;
 
     private float minPow = 0.01f, maxPow = 0.1f;
     private float minTurningPow = 0.02f, maxTurningPow = 0.8f;
@@ -30,6 +30,7 @@ public class RunMotors extends LinearOpMode
 
         leftDrive = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
+
         if (c1 == null || leftDrive == null || rightDrive == null)
         {
             telemetry.addData("Status", "Hardware not found");
@@ -71,8 +72,6 @@ public class RunMotors extends LinearOpMode
             telemetry.addData("Status", "Running");
             telemetry.update();
 
-            if (c1.x)
-                break;
         }
 
         telemetry.addData("Status", "Terminated");
