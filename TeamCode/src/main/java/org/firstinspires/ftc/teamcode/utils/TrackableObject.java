@@ -19,6 +19,8 @@ public class TrackableObject {
     private String name;
     private VuforiaTrackable target;
 
+    private static final float mmPerInch = 25.4f;
+
     public static List<TrackableObject> generateList(List<String> names, VuforiaTrackables targets) {
         List<TrackableObject> ret = new ArrayList<>();
 
@@ -57,10 +59,49 @@ public class TrackableObject {
         return ((VuforiaTrackableDefaultListener) target.getListener()).isVisible();
     }
 
+    /*
+    Returns relative position of robot in mm as matrix
+     */
     public OpenGLMatrix getPosition() {
         return ((VuforiaTrackableDefaultListener) target.getListener()).getUpdatedRobotLocation();
     }
 
+    /*
+    Returns relative position of robot in inches as vector
+     */
+    public Vector getRelRobotPos() {
+        VectorF translation = getPosition().getTranslation();
+
+        return new Vector(
+            translation.get(0) / mmPerInch,
+            translation.get(1) / mmPerInch,
+            translation.get(2) / mmPerInch
+        );
+    }
+
+    /*
+    Returns position of target relative to center in inches
+     */
+    public Vector getTargetLocation() {
+        VectorF translation = target.getLocation().getTranslation();
+
+        return new Vector(
+            translation.get(0) / mmPerInch,
+            translation.get(1) / mmPerInch,
+            translation.get(2) / mmPerInch
+        );
+    }
+
+    /*
+    Returns position of robot relative to center in inches
+     */
+    public Vector getAbsRobotPos() {
+        return getTargetLocation().subtract(getRelRobotPos());
+    }
+
+    /*
+    Returns name of trackable target
+     */
     public String getName() {
         return name;
     }

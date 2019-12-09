@@ -56,6 +56,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 
+import org.firstinspires.ftc.teamcode.utils.Vector;
 import org.firstinspires.ftc.teamcode.utils.TrackableObject;
 
 /**
@@ -90,8 +91,8 @@ import org.firstinspires.ftc.teamcode.utils.TrackableObject;
  *      Vuforia license key as is explained below.
  */
 
-@TeleOp(name = "SKYSTONE Vuforia Nav", group = "Concept")
-@Disabled
+@TeleOp(name = "SKYSTONE Vuforia Nav", group = "Linear Opmode")
+//@Disabled
 public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
 
     // IMPORTANT: For Phone Camera, set 1) the camera source and 2) the orientation,
@@ -244,20 +245,7 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
         trackables.get(names.indexOf("Stone Target")).setLocation(OpenGLMatrix.translation(0, 0, stoneZ)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90)));
 
-        /*
-            "Red Rear Bridge",
-            "Red Perimeter 1",
-            "Red Perimeter 2",
-            "Front Perimeter 1",
-            "Front Perimeter 2",
-            "Blue Perimeter 1",
-            "Blue Perimeter 2",
-            "Rear Perimeter 1",
-            "Rear Perimeter 2"
-         */
-
-        // Set the position of the bridge support targets with relation to origin
-        // (center of field)
+        // Set the position of the bridge support targets with relation to origin (center of field)
         trackables.get(names.indexOf("Blue Front Bridge")).setLocation(OpenGLMatrix.translation(-bridgeX, bridgeY, bridgeZ).multiplied(
                 Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 0, bridgeRotY, bridgeRotZ)));
 
@@ -270,8 +258,7 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
         trackables.get(names.indexOf("Red Rear Bridge")).setLocation(OpenGLMatrix.translation(bridgeX, -bridgeY, bridgeZ)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 0, bridgeRotY, 0)));
 
-        // Set the position of the perimeter targets with relation to origin (center of
-        // field)
+        // Set the position of the perimeter targets with relation to origin (center of field)
         trackables.get(names.indexOf("Red Perimeter 1")).setLocation(OpenGLMatrix.translation(quadField, -halfField, mmTargetHeight)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 180)));
 
@@ -366,10 +353,12 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
 
             // check all the trackable targets to see which one (if any) is visible.
             targetVisible = false;
+            TrackableObject visibleTarget = null;
             for (TrackableObject trackable : trackables) {
                 if (trackable.isVisible()) {
                     telemetry.addData("Visible Target", trackable.getName());
                     targetVisible = true;
+                    visibleTarget = trackable;
 
                     // getUpdatedRobotLocation() will return null if no new information is available
                     // since
@@ -385,6 +374,22 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
 
             // Provide feedback as to where the robot is located (if we know).
             if (targetVisible) {
+                Vector positionOfTarget = visibleTarget.getTargetLocation();
+                Vector relRobotPosition = visibleTarget.getRelRobotPos();
+                Vector absRobotPosition = visibleTarget.getAbsRobotPos();
+
+                // express position of target
+                telemetry.addData("Position of target (in)                  ", "{X, Y, Z} = %.1f, %.1f, %.1f",
+                        positionOfTarget.i, positionOfTarget.j, positionOfTarget.k);
+
+                // express position of target
+                telemetry.addData("Position of robot relative to target (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
+                        relRobotPosition.i, relRobotPosition.j, relRobotPosition.k);
+
+                // express position of target
+                telemetry.addData("Position of robot relative to center (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
+                        absRobotPosition.i, absRobotPosition.j, absRobotPosition.k);
+
                 // express position (translation) of robot in inches.
                 VectorF translation = lastLocation.getTranslation();
                 telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
