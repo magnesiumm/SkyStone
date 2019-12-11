@@ -42,12 +42,12 @@ public class ManualController extends LinearOpMode
             float pow = 1 / c1.left_stick_y * (maxPow - minPow) + minPow;
             boolean turning = true;
 
-            if (c1.left_stick_y > c1.left_stick_x || -c1.left_stick_y < c1.left_stick_x)
+            if (Math.abs(c1.left_stick_y) > Math.abs(c1.left_stick_x))
             {
                 dir = Direction.FORWARD;
                 turning = false;
             }
-            else if (c1.left_stick_y < c1.left_stick_x || -c1.left_stick_y > c1.left_stick_x)
+            else if (Math.abs(c1.left_stick_y) < Math.abs(c1.left_stick_x))
             {
                 dir = Direction.REVERSE;
                 turning = false;
