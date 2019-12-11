@@ -58,7 +58,7 @@ public class ManualController extends LinearOpMode
                 float turningPow = 1 / c1.left_stick_x * (maxTurningPow - minTurningPow) + minTurningPow;
                 turn(turningPow);
             }
-            else if (c1.left_stick_y != 0)
+            else if (dir != null)
             {
                 setMotors(pow, dir);
             }
@@ -78,10 +78,10 @@ public class ManualController extends LinearOpMode
     private void setMotors(float power, Direction dir)
     {
         leftDrive.setPower(power);
-        leftDrive.setDirection(dir == null ? Direction.FORWARD : dir);
+        leftDrive.setDirection(dir);
 
         rightDrive.setPower(power);
-        rightDrive.setDirection(dir == null ? Direction.FORWARD : dir);
+        rightDrive.setDirection(dir);
     }
 
     // -1 is left, 1 is right
