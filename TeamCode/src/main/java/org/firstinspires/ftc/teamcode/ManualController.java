@@ -40,7 +40,7 @@ public class ManualController extends LinearOpMode
         {
             setMotors(0, Direction.FORWARD);
             Direction dir = null;
-            float pow = 1 / c1.left_stick_y * (maxPow - minPow) + minPow;
+            float pow = c1.left_stick_y * (maxPow - minPow) + minPow;
             boolean turning = true;
 
             if (Math.abs(c1.left_stick_y) > Math.abs(c1.left_stick_x))
@@ -57,7 +57,7 @@ public class ManualController extends LinearOpMode
 
             if (turning)
             {
-                float turningPow = 1 / c1.left_stick_x * (maxTurningPow - minTurningPow) + minTurningPow;
+                float turningPow = c1.left_stick_x * (maxTurningPow - minTurningPow) + minTurningPow;
                 turn(turningPow);
             }
             else
