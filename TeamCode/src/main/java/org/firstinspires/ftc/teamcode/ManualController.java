@@ -20,13 +20,9 @@ public class ManualController extends LinearOpMode
     private DcMotor leftDrive;
     private DcMotor rightDrive;
 
-    private Gamepad c1;
-
     @Override
     public void runOpMode() throws InterruptedException
     {
-        c1 = this.gamepad1;
-
         leftDrive = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
 
@@ -40,15 +36,15 @@ public class ManualController extends LinearOpMode
         {
             setMotors(0, Direction.FORWARD);
             Direction dir = null;
-            float pow = c1.left_stick_y * (maxPow - minPow) + minPow;
+            float pow = this.gamepad1.left_stick_y * (maxPow - minPow) + minPow;
             boolean turning = true;
 
-            if (Math.abs(c1.left_stick_y) > Math.abs(c1.left_stick_x))
+            if (Math.abs(this.gamepad1.left_stick_y) > Math.abs(this.gamepad1.left_stick_x))
             {
                 dir = Direction.FORWARD;
                 turning = false;
 
-                if (c1.left_stick_y < 0) {
+                if (this.gamepad1.left_stick_y < 0) {
                     dir = Direction.REVERSE;
                 }
             }
@@ -57,7 +53,7 @@ public class ManualController extends LinearOpMode
 
             if (turning)
             {
-                float turningPow = c1.left_stick_x * (maxTurningPow - minTurningPow) + minTurningPow;
+                float turningPow = this.gamepad1.left_stick_x * (maxTurningPow - minTurningPow) + minTurningPow;
                 turn(turningPow);
             }
             else
@@ -66,7 +62,7 @@ public class ManualController extends LinearOpMode
             }
 
             telemetry.addData("Status", "Running");
-            telemetry.addData("Stick values", String.format("X: %.2f, Y: %.2f", c1.left_stick_x, c1.left_stick_y));
+            telemetry.addData("Stick values", String.format("X: %.2f, Y: %.2f", this.gamepad1.left_stick_x, this.gamepad1.left_stick_y));
 
             telemetry.update();
         }
