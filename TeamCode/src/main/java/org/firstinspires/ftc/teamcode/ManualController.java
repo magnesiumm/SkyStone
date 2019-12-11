@@ -52,13 +52,17 @@ public class ManualController extends LinearOpMode
                 dir = Direction.REVERSE;
                 turning = false;
             }
+            else
+            {
+                pow = 0;
+            }
 
             if (turning)
             {
                 float turningPow = 1 / c1.left_stick_x * (maxTurningPow - minTurningPow) + minTurningPow;
                 turn(turningPow);
             }
-            else if (dir != null)
+            else
             {
                 setMotors(pow, dir);
             }
