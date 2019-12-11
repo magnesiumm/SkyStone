@@ -7,13 +7,12 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@TeleOp(name="RunMotors", group="Linear")
+@TeleOp(name="ManualController", group="Linear")
 
 @SuppressWarnings("unused")
-public class RunMotors extends LinearOpMode
+public class ManualController extends LinearOpMode
 {
     private ElapsedTime runtime = new ElapsedTime();
-    private int tps = 1000;
 
     private float minPow = 0.01f, maxPow = 0.1f;
     private float minTurningPow = 0.02f, maxTurningPow = 0.8f;
@@ -31,31 +30,24 @@ public class RunMotors extends LinearOpMode
         leftDrive = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
 
-        if (c1 == null || leftDrive == null || rightDrive == null)
-        {
-            telemetry.addData("Status", "Hardware not found");
-            telemetry.update();
-
-            return;
-        }
+        telemetry.addData("Status", "Waiting for start");
+        telemetry.update();
 
         waitForStart();
         runtime.reset();
 
         while (opModeIsActive())
         {
-            sleep(1000 / tps);
-
             Direction dir = null;
             float pow = 1 / c1.left_stick_y * (maxPow - minPow) + minPow;
             boolean turning = true;
 
-            if (c1.left_stick_y > 0)
+            if (c1.left_stick_y > c1.left_stick_x || -c1.left_stick_y < c1.left_stick_x)
             {
                 dir = Direction.FORWARD;
                 turning = false;
             }
-            else if (c1.left_stick_y < 0)
+            else if (c1.left_stick_y < c1.left_stick_x || -c1.left_stick_y > c1.left_stick_x)
             {
                 dir = Direction.REVERSE;
                 turning = false;
@@ -66,17 +58,15 @@ public class RunMotors extends LinearOpMode
                 float turningPow = 1 / c1.left_stick_x * (maxTurningPow - minTurningPow) + minTurningPow;
                 turn(turningPow);
             }
-            else
+            else if (c1.left_stick_y != 0)
             {
                 setMotors(pow, dir);
             }
 
-
             telemetry.addData("Status", "Running");
-            telemetry.addData("Stick Values", String.format("X: %d, Y: %d", (double) c1.left_stick_x, (double) c1.left_stick_y));
+            telemetry.addData("Stick values", String.format("X: %.2f, Y: %.2f", c1.left_stick_x, c1.left_stick_y));
 
             telemetry.update();
-
         }
 
         telemetry.addData("Status", "Terminated");
