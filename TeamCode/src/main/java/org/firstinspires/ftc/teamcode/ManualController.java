@@ -46,16 +46,13 @@ public class ManualController extends LinearOpMode
             {
                 dir = Direction.FORWARD;
                 turning = false;
+
+                if (c1.left_stick_y < 0) {
+                    dir = Direction.REVERSE;
+                }
             }
-            else if (Math.abs(c1.left_stick_y) < Math.abs(c1.left_stick_x))
-            {
-                dir = Direction.REVERSE;
-                turning = false;
-            }
-            else
-            {
-                pow = 0;
-            }
+
+            telemetry.addData("Power", "" + pow);
 
             if (turning)
             {
@@ -94,10 +91,10 @@ public class ManualController extends LinearOpMode
         if (pow < 0)
         {
             leftDrive.setDirection(Direction.REVERSE);
-            leftDrive.setPower(pow);
+            leftDrive.setPower(-pow);
 
             rightDrive.setDirection(Direction.FORWARD);
-            rightDrive.setPower(pow);
+            rightDrive.setPower(-pow);
         }
         else if (pow > 0)
         {
