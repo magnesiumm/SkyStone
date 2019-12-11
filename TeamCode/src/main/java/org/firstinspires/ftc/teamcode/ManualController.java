@@ -38,6 +38,7 @@ public class ManualController extends LinearOpMode
 
         while (opModeIsActive())
         {
+            setMotors(0, Direction.FORWARD);
             Direction dir = null;
             float pow = 1 / c1.left_stick_y * (maxPow - minPow) + minPow;
             boolean turning = true;
