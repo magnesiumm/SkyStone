@@ -197,23 +197,6 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
 
         List<TrackableObject> trackables = TrackableObject.generateList(names, targetsSkyStone);
 
-                /*
-                OR
-                TrackableObject stoneTarget = new TrackableObject(0, "Stone Target", targetsSkyStone);
-                TrackableObject blueRearBridge = new TrackableObject(1, "Blue Rear Bridge", targetsSkyStone);
-                TrackableObject redRearBridge = new TrackableObject(2, "Red Rear Bridge", targetsSkyStone);
-                TrackableObject redFrontBridge = new TrackableObject(3, "Red Front Bridge", targetsSkyStone);
-                TrackableObject blueFrontBridge = new TrackableObject(4, "Blue Front Bridge", targetsSkyStone);
-                TrackableObject red1 = new TrackableObject(5, "Red Perimeter 1", targetsSkyStone);
-                TrackableObject red2 = new TrackableObject(6, "Red Perimeter 2", targetsSkyStone);
-                TrackableObject front1 = new TrackableObject(7, "Front Perimeter 1", targetsSkyStone);
-                TrackableObject front2 = new TrackableObject(8, "Front Perimeter 2", targetsSkyStone);
-                TrackableObject blue1 = new TrackableObject(9, "Blue Perimeter 1", targetsSkyStone);
-                TrackableObject blue2 = new TrackableObject(10, "Blue Perimeter 2", targetsSkyStone);
-                TrackableObject rear1 = new TrackableObject(11, "Rear Perimeter 1", targetsSkyStone);
-                TrackableObject rear2 = new TrackableObject(12, "Rear Perimeter 2", targetsSkyStone);
-                */
-
         List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
         allTrackables.addAll(targetsSkyStone);
 
