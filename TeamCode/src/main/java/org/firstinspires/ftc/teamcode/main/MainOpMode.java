@@ -2,11 +2,7 @@ package org.firstinspires.ftc.teamcode.main;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.teamcode.utils.State;
-import org.firstinspires.ftc.teamcode.utils.Vector;
 
 @TeleOp(name="Main", group="Linear Opmode")
 //@Disabled

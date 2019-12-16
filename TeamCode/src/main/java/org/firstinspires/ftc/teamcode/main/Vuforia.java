@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.main;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.internal.android.dx.command.Main;
 import org.firstinspires.ftc.teamcode.utils.MainProcess;
 import org.firstinspires.ftc.teamcode.utils.State;
 import org.firstinspires.ftc.teamcode.utils.TrackableObject;
@@ -25,21 +23,19 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 
 public class Vuforia extends MainProcess {
+    // vuforia variables
     private static final String VUFORIA_KEY = "AcQ5+hb/////AAABmRx9QlQ0XkAwqC22l77KJChhFww31MgBQxZIHSnMRH3L+7j4JY0Ji/4hoCkNEfTYmDEnk/vwHmbm5+TWEBGXRIJgxKZ/xyn30akgPkZO36FAjZAF5h6hRbh1YkKE2OY8km3I2QJaq8kEcil2Suwk0P5PL4x9B6dMhBZBKbMH0EZMMjw4l/4wdIsUECGvvD1my9Wp7fb2wI5t68D8O5kWGMVyJJG9cT5qLb60yPCXp1oziHVif5L1mwqNNsqIoFSWlkYrtmw94oUmzLTTwpEVocITqVT3W0wtJG6tLLOPn3hi+Sl3F54VGetfR3G2HeVRu9ApnOFjTcRz/WrB2eFfEl7OX+KM3VVdpaLDgCWJEfkK";
     private VuforiaLocalizer vuforia = null;
-
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
     private static final boolean PHONE_IS_PORTRAIT = false;
 
+    // list objects
     List<String> names = null;
     private List<TrackableObject> trackables;
 
-    // Since ImageTarget trackables use mm to specifiy their dimensions, we must use
-    // mm for all the physical dimension.
-    // We will define some constants and conversions here
+    // physical dimensions in mm
     private static final float mmPerInch = 25.4f;
-    private static final float mmTargetHeight = (6) * mmPerInch; // the height of the center of the target image
-    // above the floor
+    private static final float mmTargetHeight = (6) * mmPerInch; // the height of the center of the target image above the floor
 
     // Constant for Stone Target
     private static final float stoneZ = 2.00f * mmPerInch;
@@ -55,6 +51,7 @@ public class Vuforia extends MainProcess {
     private static final float halfField = 72 * mmPerInch;
     private static final float quadField = 36 * mmPerInch;
 
+    // process variables
     private VuforiaTrackables targetsSkyStone = null;
     private OpenGLMatrix lastLocation = null;
     private boolean targetVisible = false;
@@ -66,6 +63,10 @@ public class Vuforia extends MainProcess {
         super(opMode);
     }
 
+    /*
+    initialize vuforia context, set locations of targets, configure phone
+     */
+    @Override
     public void init() {
         int cameraMonitorViewId = opMode.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId",
                 "id", opMode.hardwareMap.appContext.getPackageName());
@@ -160,6 +161,10 @@ public class Vuforia extends MainProcess {
         targetsSkyStone.activate();
     }
 
+    /*
+    get location and identified target
+     */
+    @Override
     public State main() {
         // check all the trackable targets to see which one (if any) is visible.
         targetVisible = false;
@@ -188,14 +193,24 @@ public class Vuforia extends MainProcess {
         }
     }
 
+    /*
+    destroy vuforia context
+     */
+    @Override
     public void cleanup() {
         targetsSkyStone.deactivate();
     }
 
+    /*
+    get target object from list with name
+     */
     private TrackableObject getTarget(String name) {
         return trackables.get(names.indexOf(name));
     }
 
+    /*
+    generate OpenGLMatrix position from values
+     */
     private OpenGLMatrix generateLocation(float dx, float dy, float dz, float firstAngle, float secondAngle, float thirdAngle) {
         return OpenGLMatrix.translation(dx, dy, dz).
                 multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, firstAngle, secondAngle, thirdAngle));
@@ -211,6 +226,7 @@ class VuforiaState extends State {
         return new VuforiaState();
     }
 
+    // target not found
     private VuforiaState() {
         this.targetFound = false;
         this.visibleTarget = null;

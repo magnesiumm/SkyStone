@@ -7,13 +7,19 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
 import org.firstinspires.ftc.teamcode.utils.MainProcess;
 import org.firstinspires.ftc.teamcode.utils.State;
 
+/*
+Class to handle input from controller 1 for driving
+ */
 public class DriveInput extends MainProcess {
+    // power limits
     private float maxPow = 5.0f;
     private float maxTurningPow = 0.8f;
 
+    // motor objects
     private DcMotor leftDrive;
     private DcMotor rightDrive;
 
+    // motor identifiers
     private final int LEFT_MOTOR = 0;
     private final int RIGHT_MOTOR = 1;
 
@@ -21,15 +27,25 @@ public class DriveInput extends MainProcess {
         super(opMode);
     }
 
+    /*
+    get motor objects from hardware
+     */
+    @Override
     public void init() {
         leftDrive = opMode.hardwareMap.dcMotor.get("left_drive");
         rightDrive = opMode.hardwareMap.dcMotor.get("right_drive");
     }
 
+    /*
+    get input from controller and translate into motion
+     */
+    @Override
     public State main() {
+        // reset
         setMotors(0, Direction.FORWARD);
         Direction dir = null;
 
+        // get stick values
         float y = -1 * opMode.gamepad1.left_stick_y;
         float x = opMode.gamepad1.left_stick_x;
 
@@ -44,10 +60,9 @@ public class DriveInput extends MainProcess {
         return new DriveState(drive_pow, turn_pow, dir, x, y);
     }
 
-    public void cleanup() {
-
-    }
-
+    /*
+    set power to both motors
+     */
     private void setMotors(float power, Direction dir) {
         leftDrive.setPower(power);
         leftDrive.setDirection(dir);
@@ -57,10 +72,15 @@ public class DriveInput extends MainProcess {
         rightDrive.setDirection((dir == Direction.FORWARD) ? Direction.REVERSE : Direction.FORWARD);
     }
 
+    /*
+    turn the robot by decreasing power in one wheel and increasing in other
+     */
     private float turn(float x)
     {
+        // get current demanded power
         float pow = Math.abs(x * maxTurningPow);
 
+        // get current power on motors
         double leftPow = leftDrive.getPower();
         double rightPow = rightDrive.getPower();
 
@@ -69,6 +89,7 @@ public class DriveInput extends MainProcess {
             // turn left
             leftPow -= pow;
             if (leftPow < 0) {
+                // if pow negative, reverse direction
                 leftPow = Math.abs(leftPow);
                 reverseDirection(LEFT_MOTOR);
             }
@@ -85,6 +106,7 @@ public class DriveInput extends MainProcess {
 
             rightPow -= pow;
             if (rightPow < 0) {
+                // if pow negative, reverse direction
                 rightPow = Math.abs(rightPow);
                 reverseDirection(RIGHT_MOTOR);
             }
@@ -94,6 +116,9 @@ public class DriveInput extends MainProcess {
         return pow;
     }
 
+    /*
+    reverse direction of specified motor
+     */
     private void reverseDirection(int motor) {
         if (motor == LEFT_MOTOR) {
             leftDrive.setDirection((leftDrive.getDirection() == Direction.FORWARD) ? Direction.REVERSE : Direction.FORWARD);
