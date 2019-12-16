@@ -14,7 +14,7 @@ public class ManualController extends LinearOpMode
 {
     private ElapsedTime runtime = new ElapsedTime();
 
-    private float minPow = 0.01f, maxPow = 0.1f;
+    private float minPow = 5.0f, maxPow = 50.0f;
     private float minTurningPow = 0.02f, maxTurningPow = 0.8f;
 
     private DcMotor leftDrive;
@@ -36,32 +36,22 @@ public class ManualController extends LinearOpMode
         {
             setMotors(0, Direction.FORWARD);
             Direction dir = null;
-            float pow = this.gamepad1.left_stick_y * (maxPow - minPow) + minPow;
-            boolean turning = true;
 
-            if (Math.abs(this.gamepad1.left_stick_y) > Math.abs(this.gamepad1.left_stick_x))
-            {
-                dir = Direction.FORWARD;
-                turning = false;
+            float y = -1 * this.gamepad1.left_stick_y; // driving power
+            float x = this.gamepad1.left_stick_x; // turning power
 
-                if (this.gamepad1.left_stick_y < 0) {
-                    dir = Direction.REVERSE;
-                }
+            float pow = Math.abs(y * (maxPow - minPow)) + minPow;
+            if (y == 0) {
+                pow = 0f;
             }
 
-            telemetry.addData("Power", "" + pow);
+            setMotors(pow, ((y > 0) ? Direction.FORWARD : Direction.REVERSE));
 
-            if (turning)
-            {
-                float turningPow = this.gamepad1.left_stick_x * (maxTurningPow - minTurningPow) + minTurningPow;
-                turn(turningPow);
-            }
-            else
-            {
-                setMotors(pow, dir);
-            }
+            // turn robot
+            turn(x);
 
             telemetry.addData("Status", "Running");
+            telemetry.addData("Power", pow);
             telemetry.addData("Stick values", String.format("X: %.2f, Y: %.2f", this.gamepad1.left_stick_x, this.gamepad1.left_stick_y));
 
             telemetry.update();
@@ -79,27 +69,27 @@ public class ManualController extends LinearOpMode
         leftDrive.setDirection(dir);
 
         rightDrive.setPower(power);
-        rightDrive.setDirection(dir);
+        // TODO: Mechanics reverse motors
+        rightDrive.setDirection((dir == Direction.FORWARD) ? Direction.REVERSE : Direction.FORWARD);
     }
 
     // -1 is left, 1 is right
-    private void turn(float pow)
+    private void turn(float x)
     {
-        if (pow < 0)
+        float pow = Math.abs(x * (maxTurningPow - minTurningPow)) + minTurningPow;
+        if (x < 0)
         {
-            leftDrive.setDirection(Direction.REVERSE);
-            leftDrive.setPower(-pow);
-
-            rightDrive.setDirection(Direction.FORWARD);
-            rightDrive.setPower(-pow);
+            // turn left
+            leftDrive.setPower(leftDrive.getPower() + pow);
+            rightDrive.setPower(rightDrive.getPower() - pow);
         }
-        else if (pow > 0)
+        else if (x > 0)
         {
-            rightDrive.setDirection(Direction.REVERSE);
-            rightDrive.setPower(pow);
+            // turn right
+            rightDrive.setPower(rightDrive.getPower() + pow);
+            leftDrive.setPower(leftDrive.getPower() - pow);
+        } else {
 
-            leftDrive.setDirection(Direction.FORWARD);
-            leftDrive.setPower(pow);
         }
     }
 

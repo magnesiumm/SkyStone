@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name="SampleLinearOpMode", group="Linear Opmode")
-@Disabled
+//@Disabled
 public class SampleLinearOpMode extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
 

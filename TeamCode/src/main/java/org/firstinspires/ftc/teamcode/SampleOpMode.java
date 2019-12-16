@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name="SampleOpMode", group="Iterative Opmode")
-@Disabled
+//@Disabled
 public class SampleOpMode extends OpMode {
     private ElapsedTime runtime = new ElapsedTime();
 
