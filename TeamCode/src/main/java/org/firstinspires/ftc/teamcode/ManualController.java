@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
-import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name="ManualController", group="Linear")
@@ -14,8 +13,8 @@ public class ManualController extends LinearOpMode
 {
     private ElapsedTime runtime = new ElapsedTime();
 
-    private float minPow = 5.0f, maxPow = 50.0f;
-    private float minTurningPow = 0.02f, maxTurningPow = 0.8f;
+    private float maxPow = 5.0f;
+    private float maxTurningPow = 0.8f;
 
     private DcMotor leftDrive;
     private DcMotor rightDrive;
@@ -40,11 +39,9 @@ public class ManualController extends LinearOpMode
             float y = -1 * this.gamepad1.left_stick_y; // driving power
             float x = this.gamepad1.left_stick_x; // turning power
 
-            float pow = Math.abs(y * (maxPow - minPow)) + minPow;
-            if (y == 0) {
-                pow = 0f;
-            }
+            float pow = Math.abs(y * maxPow);
 
+            // drive forward or reverse
             setMotors(pow, ((y > 0) ? Direction.FORWARD : Direction.REVERSE));
 
             // turn robot
@@ -73,24 +70,20 @@ public class ManualController extends LinearOpMode
         rightDrive.setDirection((dir == Direction.FORWARD) ? Direction.REVERSE : Direction.FORWARD);
     }
 
-    // -1 is left, 1 is right
     private void turn(float x)
     {
-        float pow = Math.abs(x * (maxTurningPow - minTurningPow)) + minTurningPow;
+        float pow = Math.abs(x * maxTurningPow);
         if (x < 0)
         {
             // turn left
-            leftDrive.setPower(leftDrive.getPower() + pow);
-            rightDrive.setPower(rightDrive.getPower() - pow);
+            leftDrive.setPower(leftDrive.getPower() - pow);
+            rightDrive.setPower(rightDrive.getPower() + pow);
         }
         else if (x > 0)
         {
             // turn right
-            rightDrive.setPower(rightDrive.getPower() + pow);
-            leftDrive.setPower(leftDrive.getPower() - pow);
-        } else {
-
+            leftDrive.setPower(leftDrive.getPower() + pow);
+            rightDrive.setPower(rightDrive.getPower() - pow);
         }
     }
-
 }
