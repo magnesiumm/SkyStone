@@ -86,34 +86,48 @@ public class DriveInput extends MainProcess {
         double leftPow = leftDrive.getPower();
         double rightPow = rightDrive.getPower();
 
+        if (leftDrive.getDirection() == Direction.REVERSE) {
+            leftPow *= -1;
+        }
+        if (rightDrive.getDirection() == Direction.REVERSE) {
+            rightPow *= -1;
+        }
+
         if (x < 0)
         {
             // turn left
-            leftPow -= pow;
-            if (leftPow < 0) {
-                // if pow negative, reverse direction
-                leftPow = Math.abs(leftPow);
+
+            // if change sign, reverse motor
+            if (leftPow >= 0 && leftPow < pow) {
                 reverseDirection(LEFT_MOTOR);
             }
-            leftDrive.setPower(leftPow);
+            leftPow = Math.abs(leftPow - pow);
 
-            rightPow += pow;
-            rightDrive.setPower(rightPow);
+            // if change sign, reverse motor
+            if (rightPow <= 0 && -rightPow < pow) {
+                reverseDirection(RIGHT_MOTOR);
+            }
+            rightPow = Math.abs(rightPow + pow);
         }
         else if (x > 0)
         {
             // turn right
-            leftPow += pow;
-            leftDrive.setPower(leftPow);
 
-            rightPow -= pow;
-            if (rightPow < 0) {
-                // if pow negative, reverse direction
-                rightPow = Math.abs(rightPow);
+            // if change sign, reverse motor
+            if (leftPow <= 0 && -leftPow < pow) {
+                reverseDirection(LEFT_MOTOR);
+            }
+            leftPow = Math.abs(leftPow + pow);
+
+            // if change sign, reverse motor
+            if (rightPow >= 0 && rightPow < pow) {
                 reverseDirection(RIGHT_MOTOR);
             }
-            rightDrive.setPower(rightPow);
+            rightPow = Math.abs(rightPow - pow);
         }
+
+        leftDrive.setPower(leftPow);
+        rightDrive.setPower(rightPow);
 
         return pow;
     }
