@@ -42,7 +42,7 @@ public class DriveInput extends MainProcess {
     @Override
     public State main() {
         // reset
-        setMotors(0, Direction.FORWARD);
+        //setMotors(0, Direction.FORWARD);
         Direction dir = null;
 
         // get stick values
@@ -66,10 +66,12 @@ public class DriveInput extends MainProcess {
     private void setMotors(float power, Direction dir) {
         leftDrive.setPower(power);
         leftDrive.setDirection(dir);
+        //leftDrive.setDirection(Direction.REVERSE);
 
         rightDrive.setPower(power);
         // TODO: Mechanics reverse motors
-        rightDrive.setDirection((dir == Direction.FORWARD) ? Direction.REVERSE : Direction.FORWARD);
+        //rightDrive.setDirection((dir == Direction.FORWARD) ? Direction.REVERSE : Direction.FORWARD);
+        rightDrive.setDirection(dir);
     }
 
     /*
