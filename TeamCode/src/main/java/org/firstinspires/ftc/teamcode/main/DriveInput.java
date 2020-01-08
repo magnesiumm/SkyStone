@@ -51,13 +51,13 @@ public class DriveInput extends MainProcess {
 
         // drive
         float drive_pow = Math.abs(y * maxPow);
-        dir = (y > 0) ? Direction.FORWARD : Direction.REVERSE;
+        dir = (y >= 0) ? Direction.FORWARD : Direction.REVERSE;
         setMotors(drive_pow, dir);
 
         // turn
         float turn_pow = turn(x);
 
-        return new DriveState(drive_pow, turn_pow, dir, x, y);
+        return new DriveState(drive_pow, 0, dir, x, y);
     }
 
     /*
@@ -70,8 +70,7 @@ public class DriveInput extends MainProcess {
 
         rightDrive.setPower(power);
         // TODO: Mechanics reverse motors
-        //rightDrive.setDirection((dir == Direction.FORWARD) ? Direction.REVERSE : Direction.FORWARD);
-        rightDrive.setDirection(dir);
+        rightDrive.setDirection((dir == Direction.FORWARD) ? Direction.REVERSE : Direction.FORWARD);
     }
 
     /*
@@ -93,41 +92,23 @@ public class DriveInput extends MainProcess {
             rightPow *= -1;
         }
 
-        if (x < 0)
-        {
+        if (x < 0) {
             // turn left
 
-            // if change sign, reverse motor
-            if (leftPow >= 0 && leftPow < pow) {
-                reverseDirection(LEFT_MOTOR);
-            }
-            leftPow = Math.abs(leftPow - pow);
-
-            // if change sign, reverse motor
-            if (rightPow <= 0 && -rightPow < pow) {
-                reverseDirection(RIGHT_MOTOR);
-            }
-            rightPow = Math.abs(rightPow + pow);
-        }
-        else if (x > 0)
-        {
+            leftPow -= pow;
+            rightPow += pow;
+        } else if (x > 0) {
             // turn right
 
-            // if change sign, reverse motor
-            if (leftPow <= 0 && -leftPow < pow) {
-                reverseDirection(LEFT_MOTOR);
-            }
-            leftPow = Math.abs(leftPow + pow);
-
-            // if change sign, reverse motor
-            if (rightPow >= 0 && rightPow < pow) {
-                reverseDirection(RIGHT_MOTOR);
-            }
-            rightPow = Math.abs(rightPow - pow);
+            leftPow += pow;
+            rightPow -= pow;
         }
 
-        leftDrive.setPower(leftPow);
-        rightDrive.setPower(rightPow);
+        leftDrive.setDirection(leftPow >= 0 ? Direction.FORWARD : Direction.REVERSE);
+        rightDrive.setDirection(rightPow >= 0 ? Direction.FORWARD : Direction.REVERSE);
+
+        leftDrive.setPower(Math.abs(leftPow));
+        rightDrive.setPower(Math.abs(rightPow));
 
         return pow;
     }
