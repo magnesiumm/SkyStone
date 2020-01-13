@@ -4,6 +4,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import java.io.File;
+import java.io.IOException;
+
+import javax.sound.sampled.*;
+
 @TeleOp(name="Main", group="Linear Opmode")
 //@Disabled
 public class MainOpMode extends LinearOpMode {

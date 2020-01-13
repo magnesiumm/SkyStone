@@ -51,11 +51,14 @@ public class DriveInput extends MainProcess {
 
         // drive
         float drive_pow = Math.abs(y * maxPow);
+
+        // TODO: subtract or add for turning
+
         dir = (y >= 0) ? Direction.FORWARD : Direction.REVERSE;
         setMotors(drive_pow, dir);
 
         // turn
-        float turn_pow = turn(x);
+        float turn_pow = turn(x, drive_pow);
 
         return new DriveState(drive_pow, 0, dir, x, y);
     }
@@ -76,14 +79,18 @@ public class DriveInput extends MainProcess {
     /*
     turn the robot by decreasing power in one wheel and increasing in other
      */
-    private float turn(float x)
+    private float turn(float x, double drive_pow)
     {
+        if (Math.abs(x) < .05) {
+            return 0;
+        }
+
         // get current demanded power
         float pow = Math.abs(x * maxTurningPow);
 
         // get current power on motors
-        double leftPow = leftDrive.getPower();
-        double rightPow = rightDrive.getPower();
+        double leftPow = drive_pow;
+        double rightPow = drive_pow;
 
         if (leftDrive.getDirection() == Direction.REVERSE) {
             leftPow *= -1;
