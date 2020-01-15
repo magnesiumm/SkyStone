@@ -28,7 +28,7 @@ public class DriveInput extends MainProcess {
     }
 
     /*
-    get motor objects from hardware
+     * get motor objects from hardware
      */
     @Override
     public void init() {
@@ -37,19 +37,36 @@ public class DriveInput extends MainProcess {
     }
 
     /*
-    get input from controller and translate into motion
+     * get input from controller and translate into motion
      */
     @Override
     public State main() {
         float x = opMode.gamepad1.left_stick_x;
-        float y = opMode.gamepad1.left_stick_y;
-        float drive_pow = -1 * y * maxPow;
-        float turn_pow = -1 * x * maxTurningPow;
+        float y = -1 * opMode.gamepad1.left_stick_y;
+        float drive_pow = Math.abs(y * maxPow);
+        float turn_pow = Math.abs(x * maxTurningPow);
 
         float left_pow, right_pow;
 
-        left_pow = drive_pow + turn_pow;
-        right_pow = drive_pow + turn_pow;
+        if (x > 0) {
+            // turn right
+            left_pow = drive_pow + turn_pow;
+            right_pow = drive_pow - turn_pow;
+        } else if (x < 0) {
+            // turn left
+            left_pow = drive_pow - turn_pow;
+            right_pow = drive_pow + turn_pow;
+        } else {
+            // straight
+            left_pow = drive_pow;
+            right_pow = drive_pow;
+        }
+
+        if (y < 0) {
+            // reverse direction
+            left_pow *= -1;
+            right_pow *= -1;
+        }
 
         setLeftMotor(left_pow);
         setRightMotor(right_pow);
@@ -58,7 +75,7 @@ public class DriveInput extends MainProcess {
     }
 
     /*
-    set left motor power/direction
+     * set left motor power/direction
      */
     public void setLeftMotor(float pow) {
         leftDrive.setDirection(pow >= 0 ? Direction.FORWARD : Direction.REVERSE);
@@ -67,7 +84,7 @@ public class DriveInput extends MainProcess {
     }
 
     /*
-    set right motor power/direction
+     * set right motor power/direction
      */
     public void setRightMotor(float pow) {
         rightDrive.setDirection(pow >= 0 ? Direction.FORWARD : Direction.REVERSE);
