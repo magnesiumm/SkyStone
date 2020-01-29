@@ -4,11 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import java.io.File;
-import java.io.IOException;
-
-import javax.sound.sampled.*;
-
 @TeleOp(name="Main", group="Linear Opmode")
 //@Disabled
 public class MainOpMode extends LinearOpMode {
@@ -42,7 +37,6 @@ public class MainOpMode extends LinearOpMode {
 
             telemetry.addData("Stick Input", String.format("%.2f %.2f", driveState.stickX, driveState.stickY));
             telemetry.addData("Power", driveState.drivePower);
-            telemetry.addData("Direction", driveState.direction);
 
             telemetry.update();
         }

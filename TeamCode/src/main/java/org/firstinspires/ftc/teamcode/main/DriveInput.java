@@ -12,8 +12,8 @@ Class to handle input from controller 1 for driving
  */
 public class DriveInput extends MainProcess {
     // power limits
-    private float maxPow = 5.0f;
-    private float maxTurningPow = 0.8f;
+    private float maxPow = 0.95f;
+    private float maxTurningPow = 0.25f;
 
     // motor objects
     private DcMotor leftDrive;
@@ -46,20 +46,17 @@ public class DriveInput extends MainProcess {
         float drive_pow = Math.abs(y * maxPow);
         float turn_pow = Math.abs(x * maxTurningPow);
 
-        float left_pow, right_pow;
+        float left_pow = drive_pow;
+        float right_pow = drive_pow;
 
         if (x > 0) {
             // turn right
-            left_pow = drive_pow + turn_pow;
-            right_pow = drive_pow - turn_pow;
+            left_pow += turn_pow;
+            right_pow -= turn_pow;
         } else if (x < 0) {
             // turn left
-            left_pow = drive_pow - turn_pow;
-            right_pow = drive_pow + turn_pow;
-        } else {
-            // straight
-            left_pow = drive_pow;
-            right_pow = drive_pow;
+            left_pow -= turn_pow;
+            right_pow += turn_pow;
         }
 
         if (y < 0) {
