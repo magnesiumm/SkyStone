@@ -36,7 +36,8 @@ public class MainOpMode extends LinearOpMode {
             DriveState driveState = (DriveState)drive.main();
 
             telemetry.addData("Stick Input", String.format("%.2f %.2f", driveState.stickX, driveState.stickY));
-            telemetry.addData("Power", driveState.drivePower);
+            telemetry.addData("Left Power", driveState.leftPow);
+            telemetry.addData("Right Power", driveState.rightPow);
 
             telemetry.update();
         }

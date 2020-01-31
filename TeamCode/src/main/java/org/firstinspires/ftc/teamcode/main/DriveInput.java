@@ -68,7 +68,7 @@ public class DriveInput extends MainProcess {
         setLeftMotor(left_pow);
         setRightMotor(right_pow);
 
-        return new DriveState(drive_pow, turn_pow, x, y);
+        return new DriveState(drive_pow, turn_pow, left_pow, right_pow, x, y);
     }
 
     /*
@@ -92,12 +92,16 @@ public class DriveInput extends MainProcess {
 class DriveState extends State {
     public float drivePower;
     public float turningPower;
+    public float leftPow;
+    public float rightPow;
     public float stickX;
     public float stickY;
 
-    public DriveState(float drivePower, float turningPower, float stickX, float stickY) {
+    public DriveState(float drivePower, float turningPower, float leftPow, float rightPow, float stickX, float stickY) {
         this.drivePower = drivePower;
         this.turningPower = turningPower;
+        this.leftPow = leftPow;
+        this.rightPow = rightPow;
         this.stickX = stickX;
         this.stickY = stickY;
     }
