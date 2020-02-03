@@ -84,7 +84,7 @@ public class DriveInput extends MainProcess {
      * set right motor power/direction
      */
     public void setRightMotor(float pow) {
-        rightDrive.setDirection(pow >= 0 ? Direction.FORWARD : Direction.REVERSE);
+        rightDrive.setDirection(pow >= 0 ? Direction.REVERSE : Direction.FORWARD);
         rightDrive.setPower(Math.abs(pow));
     }
 }
